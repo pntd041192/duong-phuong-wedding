@@ -37,8 +37,8 @@
    <div class="field"><label>Muted / chữ phụ</label><div class="inline"><input id="themeMuted" type="color"><input id="themeMutedText"></div></div><div class="field"><label>Gold / màu nhấn</label><div class="inline"><input id="themeGold" type="color"><input id="themeGoldText"></div></div>
    <div class="field"><label>Font tiêu đề (CSS)</label><input id="themeSerif"></div><div class="field"><label>Font nội dung (CSS)</label><input id="themeSans"></div>
   </div></section>
-  <section class="panel" data-panel="preview" hidden><h2>Live preview</h2><p class="section-note">Xem bản nháp trên cùng thiết bị. Bấm “Lưu bản nháp & Preview” để cập nhật phần xem trước. Bản xem trước không công khai với khách.</p><iframe class="preview-frame" id="previewFrame" title="Wedding preview"></iframe></section>
-  <div class="actions"><button class="btn dark" id="saveBtn">Lưu bản nháp lên Supabase</button><button class="btn" id="previewBtn">Lưu bản nháp & Preview</button><button class="btn secondary" id="publishBtn">Xuất bản website</button></div>
+  <section class="panel" data-panel="preview" hidden><h2>Live preview</h2><p class="section-note">Xem trước nội dung ngay trên thiết bị này. Chọn tab Preview để cập nhật và kiểm tra bản xem trước; nội dung preview không tự công khai với khách.</p><iframe class="preview-frame" id="previewFrame" title="Wedding preview"></iframe></section>
+  <div class="actions"><button class="btn dark" id="saveBtn">Lưu bản nháp</button><button class="btn" id="publishBtn">Xuất bản website</button></div>
   <div class="help"><strong>Quy trình:</strong> chỉnh nội dung → Preview → kiểm tra desktop/mobile → Xuất bản. Dữ liệu công khai chỉ hiển thị khi trạng thái Published được bật.</div>
  </section>
 </div>
@@ -66,7 +66,7 @@ $("tabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(!b)return;docume
 async function save(publish=false){try{collect()}catch(e){status(e.message,"error");return}if(!sb||!user){status("Bạn cần đăng nhập trước.","error");return}const {error}=await sb.from("wedding_site").upsert({id:"main",content:data,is_published:publish,updated_at:new Date().toISOString()});if(error){status("Lưu thất bại: "+error.message,"error");return}status(publish?"Đã xuất bản website.":"Đã lưu bản nháp lên Supabase.","ok")}
 $("saveBtn").onclick=()=>save(false);$("publishBtn").onclick=()=>{if(confirm("Xuất bản nội dung hiện tại để khách mời xem?"))save(true)};
 function refreshPreview(){try{collect();localStorage.setItem("wedding-preview-draft",JSON.stringify(data));$("previewFrame").src="index.html?preview=1"}catch(e){status(e.message,"error")}}
-$("previewBtn").onclick=()=>{try{collect();localStorage.setItem("wedding-preview-draft",JSON.stringify(data));document.querySelector('[data-tab="preview"]').click();status("Đã lưu bản nháp trên trình duyệt. Preview đã cập nhật.","ok")}catch(e){status(e.message,"error")}};
+
 ["themePaper","themeInk","themeMuted","themeGold"].forEach(id=>$(id).oninput=()=>$(id+"Text").value=$(id).value);
 ["themePaperText","themeInkText","themeMutedText","themeGoldText"].forEach(id=>$(id).oninput=()=>{const color=$(id).value;if(/^#[0-9a-f]{6}$/i.test(color))$(id.replace("Text","")).value=color});
 boot();
