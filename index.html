@@ -11,16 +11,16 @@
 #opening{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:var(--paper);transition:opacity 1s ease,visibility 1s ease}
 #opening:before,#opening:after{content:"";position:absolute;left:50%;top:50%;width:min(70vw,620px);height:min(70vw,620px);border:1px solid rgba(168,139,100,.34);border-radius:50%;pointer-events:none;z-index:1;transform:translate(-50%,-50%) scale(1);opacity:.72;transition:transform 1.9s cubic-bezier(.16,.72,.2,1),opacity 1.9s ease}#opening:after{width:min(82vw,740px);height:min(82vw,740px);border-color:rgba(168,139,100,.24);transition-duration:2.05s}
 /* A soft radial bloom expands from behind the photographs to cover the viewport. */
-.opening-light{position:absolute;z-index:0;left:50%;top:50%;width:max(150vw,150vh);height:max(150vw,150vh);border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.015);background:radial-gradient(circle, #fff 0%, #fffdf9 13%, #fcf9f3 31%, #f7f2e9 56%, var(--paper) 76%, var(--paper) 100%);filter:blur(18px);will-change:transform,opacity}
+.opening-light{position:absolute;z-index:0;left:50%;top:50%;width:max(150vw,150vh);height:max(150vw,150vh);border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.015);background:radial-gradient(circle, var(--opening-light-center,#fff) 0%, #fffdf9 13%, #fcf9f3 31%, #f7f2e9 56%, var(--opening-light-edge,var(--paper)) 76%, var(--opening-light-edge,var(--paper)) 100%);filter:blur(18px);will-change:transform,opacity}
 .opening-light:after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9) 0%,rgba(255,255,255,.28) 35%,rgba(255,255,255,0) 68%);filter:blur(24px)}
-#opening.is-opening .opening-light{animation:invitationLight 1.85s cubic-bezier(.18,.68,.18,1) forwards}
+#opening.is-opening .opening-light{animation:invitationLight var(--opening-transition-duration,1850ms) cubic-bezier(.18,.68,.18,1) forwards}
 #opening.is-opening:before{transform:translate(-50%,-50%) scale(2.7);opacity:.06}
 #opening.is-opening:after{transform:translate(-50%,-50%) scale(3.15);opacity:.045}
 @keyframes invitationLight{0%{opacity:0;transform:translate(-50%,-50%) scale(.015)}10%{opacity:.98}40%{opacity:1;transform:translate(-50%,-50%) scale(.42)}76%{opacity:.98;transform:translate(-50%,-50%) scale(.92)}100%{opacity:.94;transform:translate(-50%,-50%) scale(1.28)}}
 .opening-inner{width:min(100%,560px);text-align:center;position:relative;z-index:2}.eyebrow{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
 .orbit-stage{height:250px;width:min(100%,760px);margin:4px auto 8px;position:relative;overflow:hidden;display:flex;align-items:center;touch-action:pan-y;user-select:none;cursor:grab;mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%)}
 .orbit-stage.is-dragging{cursor:grabbing}.orbit-ring{position:absolute;left:0;top:50%;display:flex;align-items:center;gap:clamp(14px,2.2vw,24px);width:max-content;will-change:transform;transform:translate3d(0,-50%,0)}
-.orbit-card{position:relative;flex:0 0 clamp(118px,17vw,158px);width:clamp(118px,17vw,158px);aspect-ratio:3/4;overflow:hidden;border:5px solid rgba(255,252,246,.94);background:#e3d8ca;box-shadow:0 12px 30px rgba(62,48,33,.14);border-radius:2px;cursor:pointer;animation:photoFloat 6.5s ease-in-out infinite;transition:transform .55s ease,box-shadow .55s ease}
+.orbit-card{position:relative;flex:0 0 clamp(118px,17vw,158px);width:clamp(118px,17vw,158px);aspect-ratio:3/4;overflow:hidden;border:5px solid rgba(255,252,246,.94);background:#e3d8ca;box-shadow:0 12px 30px rgba(62,48,33,.14);border-radius:2px;cursor:pointer;animation:var(--opening-float-animation,photoFloat) 6.5s ease-in-out infinite;transition:transform .55s ease,box-shadow .55s ease}
 .orbit-card:nth-child(3n+2){animation-delay:-2.1s}.orbit-card:nth-child(3n){animation-delay:-4.2s}.orbit-card:hover{transform:translateY(-5px) scale(1.035);box-shadow:0 18px 38px rgba(62,48,33,.2)}
 .orbit-card img{width:100%;height:100%;object-fit:cover;pointer-events:none}
 @keyframes photoFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
@@ -75,7 +75,7 @@
 <script>
 const DEFAULTS={
  couple:{one:"DƯƠNG",two:"PHƯƠNG",date:"2026-12-20",dateLabel:"20 · 12 · 2026"},
- opening:{message:"Mở thiệp, và cùng chúng mình lưu giữ một ngày thật đẹp.",seal:"D P"},
+ opening:{message:"Mở thiệp, và cùng chúng mình lưu giữ một ngày thật đẹp.",seal:"D P",images:[],speed:42,hoverPause:true,float:true,transitionDuration:1850,lightCenter:"#ffffff",lightEdge:"#f3eee6"},
  hero:{image:"https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=2400&q=85",kicker:"TOGETHER WITH OUR FAMILIES · 20 DECEMBER 2026",phrases:["A day to remember.","A love to celebrate.","Forever starts here."],align:"left",x:0,y:0,position:"center 42%"},
  intro:{title:"Two hearts.<br>One beautiful story.",text:"We would be delighted to have you with us as we celebrate the beginning of our forever."},
  gallery:{title:"Our Moments",images:["https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1800&q=85","https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=900&q=85","https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=85"]},
@@ -96,6 +96,7 @@ function applyContent(){
  const c=content,full=`${c.couple.one} & ${c.couple.two}`,date=c.couple.dateLabel||c.couple.date;
  document.documentElement.style.setProperty("--paper",c.theme.paper);document.documentElement.style.setProperty("--ink",c.theme.ink);document.documentElement.style.setProperty("--muted",c.theme.muted);document.documentElement.style.setProperty("--gold",c.theme.gold);document.documentElement.style.setProperty("--serif",c.theme.serif);document.documentElement.style.setProperty("--sans",c.theme.sans);
  document.getElementById("openingNames").innerHTML=`${esc(c.couple.one)} <i>&</i> ${esc(c.couple.two)}`;document.getElementById("openingMessage").textContent=c.opening.message;
+ const op=c.opening||{};document.documentElement.style.setProperty("--opening-light-center",op.lightCenter||"#ffffff");document.documentElement.style.setProperty("--opening-light-edge",op.lightEdge||c.theme.paper||"#f3eee6");document.documentElement.style.setProperty("--opening-transition-duration",`${Math.max(900,Math.min(4000,Number(op.transitionDuration)||1850))}ms`);document.documentElement.style.setProperty("--opening-float-animation",op.float===false?"none":"photoFloat");
  document.getElementById("heroNames").innerHTML=`${esc(c.couple.one)}<br>&amp; ${esc(c.couple.two)}`;document.getElementById("heroDate").textContent=date;document.getElementById("heroKicker").textContent=c.hero.kicker;document.getElementById("heroPhoto").style.backgroundImage=`linear-gradient(90deg,rgba(25,22,19,.43),rgba(25,22,19,.06) 75%),linear-gradient(0deg,rgba(18,16,14,.5),transparent 65%),url("${c.hero.image}")`;document.getElementById("heroPhoto").style.backgroundPosition=c.hero.position||"center";
  const hc=document.getElementById("heroContent");hc.style.setProperty("--hero-align",c.hero.align||"left");hc.style.setProperty("--hero-x",`${Number(c.hero.x)||0}px`);hc.style.setProperty("--hero-y",`${Number(c.hero.y)||0}px`);
  document.getElementById("introTitle").innerHTML=c.intro.title;document.getElementById("introText").textContent=c.intro.text;document.getElementById("galleryTitle").textContent=c.gallery.title;
@@ -116,7 +117,7 @@ let openInvitationHandler=()=>{};
 function setupOpeningOrbit(){
  const ring=document.getElementById("orbitRing"),stage=document.getElementById("orbitStage");
  if(!ring||!stage)return;
- const candidates=[content.hero?.image,...(content.gallery?.images||[])].filter(Boolean);
+ const candidates=[...(content.opening?.images||[]),content.hero?.image,...(content.gallery?.images||[])].filter(Boolean);
  const images=[...new Set(candidates)].slice(0,7);
  if(images.length<3){
   ["https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=85","https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=700&q=85","https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=700&q=85"].forEach(src=>{if(!images.includes(src))images.push(src)});
@@ -132,14 +133,14 @@ function setupOpeningOrbit(){
   const img=document.createElement("img");img.src=src;img.alt=`Wedding memory ${(i%sequence.length)+1}`;img.loading=i<4?"eager":"lazy";
   card.append(img);card.addEventListener("click",e=>{if(performance.now()<suppressClickUntil){e.preventDefault();e.stopPropagation();return}openInvitationHandler()});ring.append(card);
  });
- let offset=0,speed=42,targetSpeed=42,lastFrame=0,loopWidth=0;
+ const baseSpeed=Math.max(10,Math.min(120,Number(content.opening?.speed)||42));const pauseOnHover=content.opening?.hoverPause!==false;let offset=0,speed=baseSpeed,targetSpeed=baseSpeed,lastFrame=0,loopWidth=0;
  let dragging=false,pointerId=null,lastX=0,lastMoveTime=0,dragVelocity=0,dragDistance=0;
  const measure=()=>{loopWidth=ring.scrollWidth/2};
  measure();window.addEventListener("resize",measure);
- stage.addEventListener("pointerenter",()=>{if(!dragging)targetSpeed=0});
- stage.addEventListener("pointerleave",()=>{if(!dragging)targetSpeed=42});
- stage.addEventListener("focusin",()=>{if(!dragging)targetSpeed=0});
- stage.addEventListener("focusout",e=>{if(!dragging&&!stage.contains(e.relatedTarget))targetSpeed=42});
+ stage.addEventListener("pointerenter",()=>{if(!dragging&&pauseOnHover)targetSpeed=0});
+ stage.addEventListener("pointerleave",()=>{if(!dragging)targetSpeed=baseSpeed});
+ stage.addEventListener("focusin",()=>{if(!dragging&&pauseOnHover)targetSpeed=0});
+ stage.addEventListener("focusout",e=>{if(!dragging&&!stage.contains(e.relatedTarget))targetSpeed=baseSpeed});
  stage.addEventListener("pointerdown",e=>{
   if(e.pointerType==="mouse"&&e.button!==0)return;
   dragging=true;pointerId=e.pointerId;lastX=e.clientX;lastMoveTime=performance.now();dragVelocity=0;dragDistance=0;
@@ -160,7 +161,7 @@ function setupOpeningOrbit(){
   if(!dragging|| (e&&e.pointerId!==pointerId))return;
   dragging=false;pointerId=null;stage.classList.remove("is-dragging");
   // Carry the release velocity into the automatic marquee, then ease back to its normal pace.
-  speed=dragVelocity;targetSpeed=stage.matches(":hover")?0:42;
+  speed=dragVelocity;targetSpeed=(pauseOnHover&&stage.matches(":hover"))?0:baseSpeed;
   if(Math.abs(dragVelocity)>90) speed=Math.max(-1250,Math.min(1250,dragVelocity));
   if(dragDistance>7)suppressClickUntil=performance.now()+450;
   dragDistance=0;
@@ -184,7 +185,7 @@ function setupOpeningOrbit(){
  }
  if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches)requestAnimationFrame(animate);
 }
-async function init(){await loadContent();applyContent();const opening=document.getElementById("opening"),home=document.getElementById("home"),btn=document.getElementById("openBtn");let opened=false;openInvitationHandler=()=>{if(opened)return;opened=true;btn.disabled=true;opening.classList.add("is-opening");setTimeout(()=>{opening.classList.add("is-gone");home.classList.add("visible");home.setAttribute("aria-hidden","false");startTyping()},1850)};setupOpeningOrbit();btn.addEventListener("click",openInvitationHandler)}
+async function init(){await loadContent();applyContent();const opening=document.getElementById("opening"),home=document.getElementById("home"),btn=document.getElementById("openBtn");let opened=false;openInvitationHandler=()=>{if(opened)return;opened=true;btn.disabled=true;opening.classList.add("is-opening");setTimeout(()=>{opening.classList.add("is-gone");home.classList.add("visible");home.setAttribute("aria-hidden","false");startTyping()},Math.max(900,Math.min(4000,Number(content.opening?.transitionDuration)||1850)))};setupOpeningOrbit();btn.addEventListener("click",openInvitationHandler)}
 init();
 </script>
 </body></html>
